@@ -1,102 +1,100 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdint.h>
+
+// can't stand unfixed type sizes anymore.
+// will be used when is a number. char is stil char.
+typedef int8_t s8;
+typedef int16_t s16;
+typedef int32_t s32;
+typedef int64_t s64;
+
+typedef uint8_t u8;
+typedef uint16_t u16;
+typedef uint32_t u32;
+typedef uint64_t u64;
 
 char c; // current char.
+
 
 void error(char *msg) {
     printf("\nError: %s Expected\n", msg);
     exit(0);
 }
 
+char * tokenizer (char *c) {
+    return "";
+}
+
+void printOpp(char c) {
+    if (c >= '0' && c <= '9') printf("#%c ", c);
+    else if (c == '+') printf("ADD ");
+    else if (c == '-') printf("SUB ");
+    else if (c == '*') printf("MUL ");
+    else if (c == '/') printf("DIV ");
+}
+
+
 void revpol(char c) {
     char stack [64];
-    char que [64];
 
-    char top = -1; // index of top of stack.
-    char end = -1; // index of end of que.
+    s8 top = -1; // index of top of stack.
     while (c != EOF) {
         if (c >= '0' && c <= '9') {
-            end += 1;
-            que[end] = c;
+            printOpp(c);
         }
-        switch(c) { // we need to do an exeption for when stack and que is empty.
+        switch(c) {
             case '+': {
                 while (top >= 0 && (stack[top] == '*' | stack[top] == '/' | stack[top] == '-')) {
-                    end += 1;
-                    que[end] = stack[top];
-                    top -= 1;
+                    printOpp(stack[top--]);
                 }
-                top += 1;
-                stack[top] = c;
+                stack[++top] = c;
                 break;
-
             }
             case '-': {
                 while (top >= 0 && (stack[top] == '*' | stack[top] == '/' | stack[top] == '+')) {
-                    end += 1;
-                    que[end] = stack[top];
-                    top -= 1;
+                    printOpp(stack[top--]);
                 }
-                top += 1;
-                stack[top] = c;
+                stack[++top] = c;
                 break;
             }
             case '*': {
                 while (top >= 0 && (stack[top] == '/')) {
-                    end += 1;
-                    que[end] = stack[top];
-                    top -= 1;
+                    printOpp(stack[top--]);
                 }
-                top += 1;
-                stack[top] = c;
+                stack[++top] = c;
                 break;
             }
             case '/': {
                 while (top >= 0 && (stack[top] == '*')) {
-                    end += 1;
-                    que[end] = stack[top];
-                    top -= 1;
+                    printOpp(stack[top--]);
                 }
-                top += 1;
-                stack[top] = c;
+                stack[++top] = c;
                 break;
             }
-
+            case '(': {
+                stack[++top] = c;
+                break;
+            }
+            case ')': {
+                while (stack[top] != '(') {
+                    printOpp(stack[top--]);
+                }
+                top--;
+            }
         }
 
         c = getchar();
-                   /*
-        case '%': {
-            break;   
-        }
-        case '|': {
-            break;
-        }
-        case '&': {
-            break;            
-        }
-        */
-
     }
     while (top >= 0) {
-        end += 1;
-        que[end] = stack[top];
-        top -= 1;
-    }
-    for (char i = 0; i <= end; i++) {
-
-        printf("%c", que[i]);
+        printOpp(stack[top--]);
     }
     printf("\n");
 }
 
-
-
-int main(int argc, char *argv[]) {
+u8 main(u8 argc, char *argv[]) {
 
     // INIT
-    c = getchar();
-
-    revpol(c);
-    printf("hello world\n");
+   c = getchar(); 
+   revpol(c);
 }
