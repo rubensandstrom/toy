@@ -16,7 +16,6 @@ typedef uint64_t u64;
 
 char c; // current char.
 
-
 void error(char *msg) {
     printf("\nError: %s Expected\n", msg);
     exit(0);
@@ -34,11 +33,14 @@ void printOpp(char c) {
     else if (c == '/') printf("DIV ");
 }
 
-
+// Shunting yard algorithm.
 void revpol(char c) {
-    char stack [64];
 
+    char stack [64];
     s8 top = -1; // index of top of stack.
+
+    printf("#0 "); // all expressions should start with a 0
+
     while (c != EOF) {
         if (c >= '0' && c <= '9') {
             printOpp(c);
