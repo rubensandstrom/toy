@@ -35,11 +35,13 @@ typedef struct {
     TOKEN_COMMA,
     TOKEN_COLON,
     TOKEN_SEMICOLON,
+    TOKEN_SINGLE_QUOTE,
+    TOKEN_DOUBLE_QUOTE,
     TOKEN_EOF
   } type;
 
   char id[50];
-  int value;
+  int base;
   int exponent;
 
   int row;
@@ -50,4 +52,6 @@ typedef struct {
 token_t eat_token(file_t *file);
 token_t eat_token_id(file_t *file);
 token_t eat_token_number(file_t *file);
+int power(int base, int exp);
+char *token_to_string(token_t *token);
 #endif

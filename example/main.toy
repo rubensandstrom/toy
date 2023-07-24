@@ -1,6 +1,6 @@
 main : (arg1: s8, arg2: []char ) -> (ret1: str, err1: u8) : {
   
-  defer print(1);
+  defer print(172);
   defer print(2);
   defer print(3);
 

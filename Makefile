@@ -1,10 +1,7 @@
-run:
-	gcc ./src/*.c -Wall -o exec
+build:
+	gcc ./src/*.c -Wall -o ./bin/toy
 
 test1:
 
 clean:
-
-build:
-
-
+	rm ./bin/*
