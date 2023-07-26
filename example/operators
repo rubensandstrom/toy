@@ -1,0 +1,81 @@
+ARITHMETIC OPERATORS
++   add
+-   subtract
+*   multiply
+/   divide
+%   modulo
+
+BITWISE OPERATORS
+&   bitwise and
+|   bitwise or
+^   bitwise xor
+~   bitwise not
+~&  bitwise nand
+~|  bitwise nor
+~¤  bitwise xnor
+
+<-  bitshift left
+->  bitshift right
+
+LOGICAL OPERATORS
+&&  logical and
+||  logical or
+^^  logical xor
+~~  logical not
+~&& logical nand
+~|| logical nor
+~^^ logical xnor
+
+ASIGNMENTS
+=   assign to
++=  assign with add  
+-=  assign with subtract
+*=  assign with multiply
+/=  assign with divide
+%=  assign with modulo
+&=  assign with bitwise and
+|=  assign with bitwise or
+^=  assign with bitwise xor
+~&= assign with bitwise nand
+~|= assign with bitwise nor
+~^= assign with bitwise xnor
+
+
+COMPARISONS
+==  check for equality
+>   check for greater than
+>=  check for greater than or equality
+<   check for less than
+<=  check for less than or equality
+~=  check for non equality
+
+
+!   value of if used on identifyer
+@   address of if used on identifyer, pointer if used in type
+?   type of if used on identifyer, generic if used in type
+[]  index if used on identifyer, array if used in type
+
+
+=>  return type or types follows
+
+
+BASE TYPES
+u8
+u16
+u32
+u64
+
+s8
+s16
+s32
+s64
+int
+
+f32
+f64
+float
+
+enum
+struct
+union
+
