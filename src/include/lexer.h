@@ -117,7 +117,7 @@ typedef struct {
 } token_t;
 
 token_t make_token(file_t *file, token_type_t type, int length);
-token_t make_token_number(file_t);
+token_t make_token_number(file_t *file);
 bool is_keyword(file_t *file, char *word);
 token_t eat_token(file_t *file);
 void print_token(token_t *token);

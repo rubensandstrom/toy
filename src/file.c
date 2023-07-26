@@ -24,7 +24,7 @@ bool init_file(file_t *file, char *path) {
   }
   
   file->index = 0;
-  file->column = 0;
+  file->col = 0;
   file->row = 0;
   file->src = src;
 

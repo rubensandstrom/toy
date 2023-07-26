@@ -45,10 +45,10 @@ token_t eat_token(file_t *file) {
         }
         case 'd' : {}
         case 'e' : {
-          if (is_keyword(file, "else")) return make_token(file, TOKEN_ELSE, 4);
-          if (is_keyword(file, "enum")) return make_token(file, TOKEN_ENUM, 4);
+          if (is_keyword(file, "else")) return make_token(file, TOKEN_ELSE, 4); 
+          if (is_keyword(file, "enum")) return make_token(file, TOKEN_ENUM, 4); 
         }
-        case 'f' : {
+        case 'f' : {}
         case 'g' : {}
         case 'h' : {}
         case 'i' : {
@@ -75,16 +75,16 @@ token_t eat_token(file_t *file) {
           if (is_keyword(file, "union")) return make_token(file, TOKEN_UNION, 5);
         }
         case 'v' : {}
-        case 'w' : {
+        case 'w' : {}
         case 'x' : {}
         case 'y' : {}
         case 'z' : {}
       }
     }
 
-    if (c >= '0' && c <= '9') {
-      return make_token_number( file );
-    }
+    /* if (c >= '0' && c <= '9') { */
+    /*   return make_token_number( file ); */
+    /* } */
 
     switch ( c ) {
 
@@ -363,77 +363,108 @@ token_t eat_token(file_t *file) {
   return make_token(file, TOKEN_EOF, 1);
 }
 
-
-// If the first character of the token is an alphabetical uppercase or owercase or an underline, then it is an id.
-// At this point it does not matter if it is the name (of a variable, function etc) or a keyword. This will be
-// handled later.
-token_t make_token_id(file_t *file) {
-  token_t token = {
-    .type = TOKEN_ID,
-    .id = "",
-    .col = file->col,
-    .row = file->row,
-    .coefficient = 0,
-    .exponent = 0
-  };
-
-
-  char c = file->src[file->i];
-  int i = 0;
-  
-  while ( ( c >= 'a' && c <= 'z' ) || ( c >= 'A' && c <= 'Z' ) || ( c >= '0' && c <= '9' ) || c == '_' ) {
-    token.id[i] = c;
-    i += 1;
-    file->i += 1;
-    file->col += 1;
-    c = file->src[file->i];
-  }
-  token.id[i] = '\0';
-
-  return token;
-}
-
-token_t make_token_number(file_t *file) {
-
-}
-
 void print_token(token_t *token) {
 
   char *token_type;
 
   switch (token->type) {
     
-    case TOKEN_IDENTIFIER:              token_type = "TOKEN_ID"; break;
-    case TOKEN_NUMBER:          token_type = "TOKEN_NUMBER"; break;
-    case TOKEN_EQUALS:          token_type = "TOKEN_EQUALS"; break;
-    case TOKEN_EQUALS_EQUALS:   token_type = "TOKEN_EQUALS_EQUALS"; break;
-    case TOKEN_PLUS:            token_type = "TOKEN_PLUS"; break;
-    case TOKEN_PLUS_EQUALS:     token_type = "TOKEN_PLUS_EQUALS"; break;
-    case TOKEN_MINUS:           token_type = "TOKEN_MINUS"; break;
-    case TOKEN_MINUS_EQUALS:    token_type = "TOKEN_MINUS_EQUALS"; break;
-    case TOKEN_LESS:            token_type = "TOKEN_LESS"; break;
-    case TOKEN_LESS_EQUALS:     token_type = "TOKEN_LESS_EQUALS"; break;
-    case TOKEN_GREATER:         token_type = "TOKEN_GREATER"; break;
-    case TOKEN_GREATER_EQUALS:  token_type = "TOKEN_GREATER_EQUALS"; break;
-    case TOKEN_LPAREN:          token_type = "TOKEN_LPAREN"; break;
-    case TOKEN_RPAREN:          token_type = "TOKEN_RPAREN"; break;
-    case TOKEN_LBRACKET:        token_type = "TOKEN_LBRACKET"; break;
-    case TOKEN_RBRACKET:        token_type = "TOKEN_RBRACKET"; break;
-    case TOKEN_LBRACE:          token_type = "TOKEN_LBRACE"; break;
-    case TOKEN_RBRACE:          token_type = "TOKEN_RBRACE"; break;
-    case TOKEN_DOT:             token_type = "TOKEN_DOT"; break;
-    case TOKEN_COMMA:           token_type = "TOKEN_COMMA"; break;
-    case TOKEN_COLON:           token_type = "TOKEN_COLON"; break;
-    case TOKEN_SEMICOLON:       token_type = "TOKEN_SEMICOLON"; break;
-    case TOKEN_SINGLE_QUOTE:    token_type = "TOKEN_SINGLE_QUOTE"; break;
-    case TOKEN_DOUBLE_QUOTE:    token_type = "TOKEN_DOUBLE_QUOTE"; break;
-    case TOKEN_EOF:             token_type = "TOKEN_EOF"; break;
+
+    // Literals.
+    case TOKEN_IDENTIFIER : token_type = "TOKEN_IDENTIFIER"; break;
+    case TOKEN_CHARACTER : token_type = "TOKEN_CHARACTER"; break;
+    case TOKEN_STRING : token_type = "TOKEN_STRING"; break;
+    case TOKEN_NUMBER : token_type = "TOKEN_NUMBER"; break;
+
+    // ARITHMETIC OPERATORj 
+    case TOKEN_EQUALS : token_type = "TOKEN_EQUALS"; break;
+    case TOKEN_PLUS : token_type = "TOKEN_PLUS"; break;
+    case TOKEN_MINUS : token_type = "TOKEN_MINUS"; break; case TOKEN_STAR : token_type = "TOKEN_STAR"; break; case TOKEN_SLASH : token_type = "TOKEN_SLASH"; break;
+    case TOKEN_MODULO : token_type = "TOKEN_MODULO"; break;
+    
+    // BITWISE OPERATORS
+    case TOKEN_AND : token_type = "TOKEN_AND"; break;
+    case TOKEN_OR : token_type = "TOKEN_OR"; break;
+    case TOKEN_XOR : token_type = "TOKEN_XOR"; break;
+    case TOKEN_TILDE : token_type = "TOKEN_TILDE"; break;
+    case TOKEN_TILDE_AND : token_type = "TOKEN_TILDE_AND"; break;
+    case TOKEN_TILDE_OR : token_type = "TOKEN_TILDE_OR"; break;
+    case TOKEN_TILDE_XOR : token_type = "TOKEN_TILDE_XOR"; break;
+
+    // LOGICAL OPERATORS
+    case TOKEN_AND_AND : token_type = "TOKEN_AND_AND"; break;
+    case TOKEN_OR_OR : token_type = "TOKEN_OR_OR"; break;
+    case TOKEN_XOR_XOR : token_type = "TOKEN_XOR_XOR"; break;
+    case TOKEN_TILDE_TILDE : token_type = "TOKEN_TILDE_TILDE"; break;
+    case TOKEN_TILDE_AND_AND : token_type = "TOKEN_TILDE_AND_AND"; break;
+    case TOKEN_TILDE_OR_OR : token_type = "TOKEN_TILDE_OR_OR"; break;
+    case TOKEN_TILDE_XOR_XOR : token_type = "TOKEN_TILDE_XOR_XOR"; break;
+
+    // ASIGNMENTS
+    case TOKEN_PLUS_EQUALS : token_type = "TOKEN_PLUS_EQUALS"; break;
+    case TOKEN_MINUS_EQUALS : token_type = "TOKEN_MINUS_EQUALS"; break;
+    case TOKEN_STAR_EQUALS : token_type = "TOKEN_STAR_EQUALS"; break;
+    case TOKEN_SLASH_EQUALS : token_type = "TOKEN_SLASH_EQUALS"; break;
+    case TOKEN_MODULO_EQUALS : token_type = "TOKEN_MODULO_EQUALS"; break;
+    case TOKEN_AND_EQUALS : token_type = "TOKEN_AND_EQUALS"; break;
+    case TOKEN_OR_EQUALS : token_type = "TOKEN_OR_EQUALS"; break;
+    case TOKEN_XOR_EQUALS : token_type = "TOKEN_XOR_EQUALS"; break;
+    case TOKEN_TILDE_AND_EQUALS : token_type = "TOKEN_TILDE_AND_EQUALS"; break;
+    case TOKEN_TILDE_OR_EQUALS : token_type = "TOKEN_TILDE_OR_EQUALS"; break;
+    case TOKEN_TILDE_XOR_EQUALS : token_type = "TOKEN_TILDE_XOR_EQUALS"; break;
+
+    // COPMPARISONS
+    case TOKEN_EQUALS_EQUALS : token_type = "TOKEN_EQUALS_EQUALS"; break;
+    case TOKEN_LESS : token_type = "TOKEN_LESS"; break;
+    case TOKEN_LESS_EQUALS : token_type = "TOKEN_LESS_EQUALS"; break;
+    case TOKEN_GREATER : token_type = "TOKEN_GREATER"; break;
+    case TOKEN_GREATER_EQUALS : token_type = "TOKEN_GREATER_EQUALS"; break;
+    case TOKEN_TILDE_EQUALS : token_type = "TOKEN_TILDE_EQUALS"; break;
+
+    case TOKEN_LPAREN : token_type = "TOKEN_LPAREN"; break;
+    case TOKEN_RPAREN : token_type = "TOKEN_RPAREN"; break;
+    case TOKEN_LBRACKET : token_type = "TOKEN_LBRACKET"; break;
+    case TOKEN_RBRACKET : token_type = "TOKEN_RBRACKET"; break;
+    case TOKEN_LBRACE : token_type = "TOKEN_LBRACE"; break;
+    case TOKEN_RBRACE : token_type = "TOKEN_RBRACE"; break;
+
+    case TOKEN_DOT : token_type = "TOKEN_DOT"; break;
+    case TOKEN_COMMA : token_type = "TOKEN_COMMA"; break;
+    case TOKEN_COLON : token_type = "TOKEN_COLON"; break;
+    case TOKEN_SEMICOLON : token_type = "TOKEN_SEMICOLON"; break;
+
+    case TOKEN_FAT_ARROW : token_type = "TOKEN_FAT_ARROW"; break;
+    case TOKEN_LARROW : token_type = "TOKEN_LARROW"; break;
+    case TOKEN_RARROW : token_type = "TOKEN_RARROW"; break;
+
+    case TOKEN_BANG :  token_type = "TOKEN_BANG"; break;
+    case TOKEN_ROOF : token_type = "TOKEN_ROOF"; break;
+    case TOKEN_QMARK : token_type = "TOKEN_QMARK"; break;
+    case TOKEN_AT : token_type = "TOKEN_AT"; break;
+    case TOKEN_HASH : token_type = "TOKEN_HASH"; break;
+
+
+    case TOKEN_ENUM : token_type = "TOKEN_ENUM"; break;
+    case TOKEN_STRUCT : token_type = "TOKEN_STRUCT"; break;
+    case TOKEN_UNION : token_type = "TOKEN_UNION"; break;
+
+    // KEYWORDS
+    case TOKEN_FOR : token_type = "TOKEN_FOR"; break;
+    case TOKEN_WHILE : token_type = "TOKEN_WHILE"; break;
+    case TOKEN_LOOP : token_type = "TOKEN_LOOP"; break;
+    case TOKEN_BREAK : token_type = "TOKEN_BREAK"; break;
+    case TOKEN_CONTINUE : token_type = "TOKEN_CONTINUE"; break;
+    case TOKEN_IF : token_type = "TOKEN_IF"; break;
+    case TOKEN_ELSE : token_type = "TOKEN_ELSE"; break;
+    case TOKEN_TYPEDEF : token_type = "TOKEN_TYPEDEF"; break;
+
+
+    case TOKEN_ERROR : token_type = "TOKEN_ERROR"; break;
+    case TOKEN_EOF : token_type = "TOKEN_EOF"; break;
   }
 
-  printf(
-      "<ID: `%s`, TYPE: `%s`, ROW: `%d`, COL: `%d`, COEFFICIENT: `%d`, EXPONENT: `%d`>\n", 
-      token, token_type, token->row, token->col, token->coefficient, token->exponent
-      );
-
-  
+  printf (
+      "<ID: `%d`, TYPE: `%s`, ROW: `%d`, COL: `%d`>\n", 
+      token->type, token_type, token->row, token->col
+  );
 } 
