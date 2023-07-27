@@ -19,6 +19,7 @@ int main(int argc, char **argv) {
   while ((token = eat_token(&file)).type != TOKEN_EOF) {
     print_token(&token);
   }
+  print_token(&token);
   return 0;
 }
 

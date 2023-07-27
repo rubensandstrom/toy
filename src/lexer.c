@@ -1,4 +1,5 @@
 #include "include/lexer.h"
+#include <stdio.h>
 
 token_t make_token(file_t *file, token_type_t type, int length) {
 
@@ -19,13 +20,14 @@ token_t make_token(file_t *file, token_type_t type, int length) {
 bool is_keyword(file_t *file, char *word) {
   char c = peek_char(file, 0);
   int i = 0;
-  while (c >= 'a' && c <= 'z') {
+  while ( word[i] != '\0' ) {
     if (c != word[i]) {
       return false;
     }
     i += 1;
     c = peek_char(file, i);
   }
+  if ((c >= 'a' && c <= 'z' ) || ( c >= 'A' && c <= 'Z' ) || c == '_') return false;
   return true;
 }
 
@@ -36,50 +38,64 @@ token_t eat_token(file_t *file) {
 
     if ( ( c >= 'a' && c <= 'z' ) || ( c >= 'A' && c <= 'Z' ) || c == '_' ) { // change to utf-8 later.
       switch (c) {
-        case 'a' : {}
+        case 'a' : break;
         case 'b' : {
           if (is_keyword(file, "break")) return make_token(file, TOKEN_BREAK, 5);
+          break;
         }
         case 'c' : {
           if (is_keyword(file, "continue")) return make_token(file, TOKEN_CONTINUE, 8);
+          break;
         }
-        case 'd' : {}
+        case 'd' : break;
         case 'e' : {
           if (is_keyword(file, "else")) return make_token(file, TOKEN_ELSE, 4); 
           if (is_keyword(file, "enum")) return make_token(file, TOKEN_ENUM, 4); 
+          break;
         }
-        case 'f' : {}
-        case 'g' : {}
-        case 'h' : {}
+        case 'f' : break;
+        case 'g' : break;
+        case 'h' : break;
         case 'i' : {
           if (is_keyword(file, "if")) return make_token(file, TOKEN_IF, 2);
+          break;
         }
-        case 'j' : {}
-        case 'k' : {}
+        case 'j' : break;
+        case 'k' : break;
         case 'l' : {
           if (is_keyword(file, "loop")) return make_token(file, TOKEN_LOOP, 4);
+          break;
         }
-        case 'm' : {}
-        case 'n' : {}
-        case 'o' : {}
-        case 'p' : {}
-        case 'q' : {}
-        case 'r' : {}
+        case 'm' : break;
+        case 'n' : break;
+        case 'o' : break;
+        case 'p' : break;
+        case 'q' : break;
+        case 'r' : break;
         case 's' : {
           if (is_keyword(file, "struct")) return make_token(file, TOKEN_STRUCT, 6);
+          break;
         }
         case 't' : {
           if (is_keyword(file, "typedef")) return make_token(file, TOKEN_TYPEDEF, 7);
+          break;
         }
         case 'u' : {
           if (is_keyword(file, "union")) return make_token(file, TOKEN_UNION, 5);
+          break;
         }
-        case 'v' : {}
-        case 'w' : {}
-        case 'x' : {}
-        case 'y' : {}
-        case 'z' : {}
+        case 'v' : break;
+        case 'w' : break;
+        case 'x' : break;
+        case 'y' : break;
+        case 'z' : break;
       }
+      int i = 0;
+      while ((c >= 'a' && c <= 'z' ) || ( c >= 'A' && c <= 'Z' ) || ( c >= '0' && c <= '9' ) || c == '_') {
+        i += 1;
+        c = peek_char(file, i);
+      }
+      return make_token(file, TOKEN_IDENTIFIER, i);
     }
 
     /* if (c >= '0' && c <= '9') { */
@@ -89,7 +105,13 @@ token_t eat_token(file_t *file) {
     switch ( c ) {
 
       case ' ' :
+        file->index += 1;
+        file->col += 1;
+        continue;
       case '\r' :
+        file->index += 1;
+        file->col += 1;
+        continue;
       case '\t' : {
         file->index += 1;
         file->col += 1;
