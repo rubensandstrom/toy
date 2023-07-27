@@ -376,7 +376,7 @@ token_t eat_token(file_t *file) {
 
       default : {
 
-        return make_token(file, TOKEN_ERROR, 50);
+        return make_token(file, TOKEN_ERROR, 1);
       }
 
     }
@@ -385,7 +385,7 @@ token_t eat_token(file_t *file) {
   return make_token(file, TOKEN_EOF, 1);
 }
 
-void print_token(token_t *token) {
+void print_token(file_t *file, token_t *token) {
 
   char *token_type;
 
@@ -486,7 +486,12 @@ void print_token(token_t *token) {
   }
 
   printf (
-      "<ID: `%d`, TYPE: `%s`, ROW: `%d`, COL: `%d`>\n", 
-      token->type, token_type, token->row, token->col
+    "<ID: `%d`, TYPE: `%s`, LEXME: ", 
+    token->type, token_type
   );
+  for (int i = token->lexme.start; i <= token->lexme.stop; i++) {
+    printf("%c", file->src[i]);
+  }
+  printf(", ROW: %d, COL: %d\n", token->row, token->col);
+
 } 
