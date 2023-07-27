@@ -486,12 +486,12 @@ void print_token(file_t *file, token_t *token) {
   }
 
   printf (
-    "<ID: `%d`, TYPE: `%s`, LEXME: ", 
+    "<ID: `%d`, TYPE: `%s`, LEXME: `", 
     token->type, token_type
   );
   for (int i = token->lexme.start; i <= token->lexme.stop; i++) {
     printf("%c", file->src[i]);
   }
-  printf(", ROW: %d, COL: %d\n", token->row, token->col);
+  printf("`, ROW: %d, COL: %d\n", token->row, token->col);
 
 } 
