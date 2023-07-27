@@ -11,6 +11,7 @@ char *substring(char *string, int start, int stop) {
     rv[i] = string[j];
     i += 1;
   }
+  rv[i] = '\0';
   return rv;
 }
 
@@ -23,17 +24,20 @@ void verify_next_token(file_t *file, token_type_t type, char *lexme) {
   int i = 0;
   while (lexme[i] != '\0' && token.lexme.start + i <= token.lexme.stop) {
     if (lexme[i] != file->src[token.lexme.start + i]) {
-      char * s = substring(file->src, token.lexme.start, token.lexme.stop);
-      printf("[FAIL] `%s` != `%s`\n", lexme, s);
+      char *s = substring(file->src, token.lexme.start, token.lexme.stop);
+      printf("[FAIL] expexted `%s` got `%s`\n", lexme, s);
       free(s);
       return;
     }
     i += 1;
   }
-  printf("[PASS]\n");
+  char *s = substring(file->src, token.lexme.start, token.lexme.stop);
+  printf("[PASS] `%s`, `%s`\n", get_token_type(&token.type), s);
+  free(s);
 }
 int main(int argc, char **argv) {
 
+  printf("TEST 1.\n");
   // SETUP
   char *src = "main: (argc: int, argv: @s8) => (int) : {\n\treturn 0;\n}";
   file_t file = {
@@ -42,6 +46,8 @@ int main(int argc, char **argv) {
     .row = 0,
     .src = src
   };
+  printf("This is a test of the lexer that will test that the right tokens are produced from the following test string:\n");
+  printf("\n%s\n\n", src);
 
   // TEST
   verify_next_token(&file, TOKEN_IDENTIFIER, "main");
