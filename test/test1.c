@@ -72,7 +72,7 @@ int main(int argc, char **argv) {
   verify_next_token(&file, TOKEN_NUMBER, "0");
   verify_next_token(&file, TOKEN_SEMICOLON, ";");
   verify_next_token(&file, TOKEN_RBRACE, "}");
-  verify_next_token(&file, TOKEN_EOF, "");
+  verify_next_token(&file, TOKEN_EOF, "\0");
 
   return 0;
 }

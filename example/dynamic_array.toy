@@ -9,7 +9,7 @@ initiate_dynamic_array: (
   dynarr: @dynamic_array, 
   initial_capacity: int, 
   growth_factor: float, 
-  element: ?T 
+  element: ?T
   ) : {
 
   .capacity = initial_capacity;

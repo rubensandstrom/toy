@@ -592,4 +592,5 @@ char *get_token_type(token_type_t *type) {
       case TOKEN_ERROR : return "TOKEN_ERROR";
       case TOKEN_EOF : return "TOKEN_EOF";
     }
+    return "UNKNOWN_ERROR";
 }
