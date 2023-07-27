@@ -122,4 +122,5 @@ bool is_keyword(file_t *file, char *word);
 token_t eat_token(file_t *file);
 void print_token(file_t *file, token_t *token);
 
+char *get_token_type(token_type_t *type);
 #endif

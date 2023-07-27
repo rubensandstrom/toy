@@ -495,3 +495,101 @@ void print_token(file_t *file, token_t *token) {
   printf("`, ROW: %d, COL: %d\n", token->row, token->col);
 
 } 
+
+char *get_token_type(token_type_t *type) {
+    // Literals.
+    switch( *type ) {
+      case TOKEN_IDENTIFIER : return "TOKEN_IDENTIFIER";
+      case TOKEN_CHARACTER : return "TOKEN_CHARACTER";
+      case TOKEN_STRING : return "TOKEN_STRING";
+      case TOKEN_NUMBER : return "TOKEN_NUMBER";
+
+      // ARITHMETIC OPERATORj 
+      case TOKEN_EQUALS : return "TOKEN_EQUALS";
+      case TOKEN_PLUS : return "TOKEN_PLUS";
+      case TOKEN_MINUS : return "TOKEN_MINUS";
+      case TOKEN_STAR : return "TOKEN_STAR";
+      case TOKEN_SLASH : return "TOKEN_SLASH";
+      case TOKEN_MODULO : return "TOKEN_MODULO";
+      
+      // BITWISE OPERATORS
+      case TOKEN_AND : return "TOKEN_AND";
+      case TOKEN_OR : return "TOKEN_OR";
+      case TOKEN_XOR : return "TOKEN_XOR";
+      case TOKEN_TILDE : return "TOKEN_TILDE";
+      case TOKEN_TILDE_AND : return "TOKEN_TILDE_AND";
+      case TOKEN_TILDE_OR : return "TOKEN_TILDE_OR";
+      case TOKEN_TILDE_XOR : return "TOKEN_TILDE_XOR";
+
+      // LOGICAL OPERATORS
+      case TOKEN_AND_AND : return "TOKEN_AND_AND";
+      case TOKEN_OR_OR : return "TOKEN_OR_OR";
+      case TOKEN_XOR_XOR : return "TOKEN_XOR_XOR";
+      case TOKEN_TILDE_TILDE : return "TOKEN_TILDE_TILDE";
+      case TOKEN_TILDE_AND_AND : return "TOKEN_TILDE_AND_AND";
+      case TOKEN_TILDE_OR_OR : return "TOKEN_TILDE_OR_OR";
+      case TOKEN_TILDE_XOR_XOR : return "TOKEN_TILDE_XOR_XOR";
+
+      // ASIGNMENTS
+      case TOKEN_PLUS_EQUALS : return "TOKEN_PLUS_EQUALS";
+      case TOKEN_MINUS_EQUALS : return "TOKEN_MINUS_EQUALS";
+      case TOKEN_STAR_EQUALS : return "TOKEN_STAR_EQUALS";
+      case TOKEN_SLASH_EQUALS : return "TOKEN_SLASH_EQUALS";
+      case TOKEN_MODULO_EQUALS : return "TOKEN_MODULO_EQUALS";
+      case TOKEN_AND_EQUALS : return "TOKEN_AND_EQUALS";
+      case TOKEN_OR_EQUALS : return "TOKEN_OR_EQUALS";
+      case TOKEN_XOR_EQUALS : return "TOKEN_XOR_EQUALS";
+      case TOKEN_TILDE_AND_EQUALS : return "TOKEN_TILDE_AND_EQUALS";
+      case TOKEN_TILDE_OR_EQUALS : return "TOKEN_TILDE_OR_EQUALS";
+      case TOKEN_TILDE_XOR_EQUALS : return "TOKEN_TILDE_XOR_EQUALS";
+
+      // COPMPARISONS
+      case TOKEN_EQUALS_EQUALS : return "TOKEN_EQUALS_EQUALS";
+      case TOKEN_LESS : return "TOKEN_LESS";
+      case TOKEN_LESS_EQUALS : return "TOKEN_LESS_EQUALS";
+      case TOKEN_GREATER : return "TOKEN_GREATER";
+      case TOKEN_GREATER_EQUALS : return "TOKEN_GREATER_EQUALS";
+      case TOKEN_TILDE_EQUALS : return "TOKEN_TILDE_EQUALS";
+
+      case TOKEN_LPAREN : return "TOKEN_LPAREN";
+      case TOKEN_RPAREN : return "TOKEN_RPAREN";
+      case TOKEN_LBRACKET : return "TOKEN_LBRACKET";
+      case TOKEN_RBRACKET : return "TOKEN_RBRACKET";
+      case TOKEN_LBRACE : return "TOKEN_LBRACE";
+      case TOKEN_RBRACE : return "TOKEN_RBRACE";
+
+      case TOKEN_DOT : return "TOKEN_DOT";
+      case TOKEN_COMMA : return "TOKEN_COMMA";
+      case TOKEN_COLON : return "TOKEN_COLON";
+      case TOKEN_SEMICOLON : return "TOKEN_SEMICOLON";
+
+      case TOKEN_FAT_ARROW : return "TOKEN_FAT_ARROW";
+      case TOKEN_LARROW : return "TOKEN_LARROW";
+      case TOKEN_RARROW : return "TOKEN_RARROW";
+
+      case TOKEN_BANG :  return "TOKEN_BANG";
+      case TOKEN_ROOF : return "TOKEN_ROOF";
+      case TOKEN_QMARK : return "TOKEN_QMARK";
+      case TOKEN_AT : return "TOKEN_AT";
+      case TOKEN_HASH : return "TOKEN_HASH";
+
+
+      case TOKEN_ENUM : return "TOKEN_ENUM";
+      case TOKEN_STRUCT : return "TOKEN_STRUCT";
+      case TOKEN_UNION : return "TOKEN_UNION";
+
+      // KEYWORDS
+      case TOKEN_FOR : return "TOKEN_FOR";
+      case TOKEN_WHILE : return "TOKEN_WHILE";
+      case TOKEN_LOOP : return "TOKEN_LOOP";
+      case TOKEN_BREAK : return "TOKEN_BREAK";
+      case TOKEN_CONTINUE : return "TOKEN_CONTINUE";
+      case TOKEN_IF : return "TOKEN_IF";
+      case TOKEN_ELSE : return "TOKEN_ELSE";
+      case TOKEN_TYPEDEF : return "TOKEN_TYPEDEF";
+
+
+      case TOKEN_ERROR : return "TOKEN_ERROR";
+      case TOKEN_EOF : return "TOKEN_EOF";
+    }
+}
