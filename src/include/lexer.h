@@ -73,8 +73,10 @@ typedef enum {
     TOKEN_SEMICOLON,
 
     TOKEN_FAT_ARROW, // return type follows
-    TOKEN_LARROW, // bitshift left
-    TOKEN_RARROW, // bitshift right
+    TOKEN_LSHIFT_EQUALS, // bitshift left
+    TOKEN_LSHIFT, // bitshift left
+    TOKEN_RSHIFT_EQUALS, // bitshift right
+    TOKEN_RSHIFT, // bitshift right
 
     TOKEN_BANG, // dereference if used on identifyer or address literal
     TOKEN_ROOF, // address of if used on identifyer, pointer if used in type
@@ -122,5 +124,5 @@ bool is_keyword(file_t *file, char *word);
 token_t eat_token(file_t *file);
 void print_token(file_t *file, token_t *token);
 
-char *get_token_type(token_type_t *type);
+char *get_token_type(token_type_t type);
 #endif

@@ -6,7 +6,7 @@ typedef dynamic_array: struct {
 }; 
 
 initiate_dynamic_array: ( 
-  dynarr: @dynamic_array, 
+  darray: @dynamic_array, 
   initial_capacity: int, 
   growth_factor: float, 
   element: ?T
@@ -15,7 +15,7 @@ initiate_dynamic_array: (
   .capacity = initial_capacity;
   .size = 0;
   .growth_factor = growth_factor;
-  .array: @T = (@T)malloc(.array, .capacity * sizeof(type))
+  .array: @T = (@T)malloc(.array, .initial_capacity * sizeof(type))
 
 } 
 
@@ -40,3 +40,12 @@ pop: ( dynarr: ^dynamic_array ) => ( element: ?T ) : {
   return .array[.size];
 
 }
+>
+>=
+>>
+>>=
+<
+<=
+<<
+<<=
+

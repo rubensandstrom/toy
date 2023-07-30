@@ -1,5 +1,6 @@
 #include "include/lexer.h"
 #include <stdio.h>
+#include <sys/types.h>
 
 token_t make_token(file_t *file, token_type_t type, int length) {
 
@@ -15,6 +16,54 @@ token_t make_token(file_t *file, token_type_t type, int length) {
   file->index += length;
   file->col += length;
   return token;
+}
+
+token_t make_token_number(file_t *file) {
+
+  int i = 0;
+  if ( peek_char(file, 0) == '0' && peek_char(file, 1) == 'b' ) {
+    i = 2;
+    char c = peek_char(file, i);
+    while ( c == '0' || c == '1' || c == '_') {
+      i += 1;
+      c = peek_char(file, i);
+    }
+    return make_token(file, TOKEN_NUMBER, i);
+  }
+
+  if ( peek_char(file, 0) == '0' && peek_char(file, 1) == 'o' ) {
+    i = 2;
+    char c = peek_char(file, i);
+    while ( ( c >= '0' && c <= '7' ) || c == '_' ) {
+      i += 1;
+      c = peek_char(file, i);
+    }
+    return make_token(file, TOKEN_NUMBER, i);
+  }
+
+  if ( peek_char(file, 0) == '0' && peek_char(file, 1) == 'x' ) {
+    i = 2;
+    char c = peek_char(file, i);
+    while ( ( c >= '0' && c <= '9' ) || ( c >= 'a' && c <= 'f' ) || ( c >= 'A' && c <= 'F' ) || c == '_' ) {
+      i += 1;
+      c = peek_char(file, i);
+    }
+    return make_token(file, TOKEN_NUMBER, i);
+  }
+
+  int dots = 0;
+  char c = peek_char(file, i);
+  while ( ( c >= '0' && c <= '9' ) || c == '.' || c == '_' ) {
+    if ( c == '.' ) {
+      dots += 1;
+    }
+    i += 1;
+    c = peek_char(file, i);
+  }
+  if ( dots > 1 ) {
+    return make_token(file, TOKEN_ERROR, i);
+  }
+  return make_token(file, TOKEN_NUMBER, i);
 }
 
 bool is_keyword(file_t *file, char *word) {
@@ -38,7 +87,6 @@ token_t eat_token(file_t *file) {
 
     if ( ( c >= 'a' && c <= 'z' ) || ( c >= 'A' && c <= 'Z' ) || c == '_' ) { // change to utf-8 later.
       switch (c) {
-        case 'a' : break;
         case 'b' : {
           if (is_keyword(file, "break")) return make_token(file, TOKEN_BREAK, 5);
           break;
@@ -47,31 +95,19 @@ token_t eat_token(file_t *file) {
           if (is_keyword(file, "continue")) return make_token(file, TOKEN_CONTINUE, 8);
           break;
         }
-        case 'd' : break;
         case 'e' : {
           if (is_keyword(file, "else")) return make_token(file, TOKEN_ELSE, 4); 
           if (is_keyword(file, "enum")) return make_token(file, TOKEN_ENUM, 4); 
           break;
         }
-        case 'f' : break;
-        case 'g' : break;
-        case 'h' : break;
         case 'i' : {
           if (is_keyword(file, "if")) return make_token(file, TOKEN_IF, 2);
           break;
         }
-        case 'j' : break;
-        case 'k' : break;
         case 'l' : {
           if (is_keyword(file, "loop")) return make_token(file, TOKEN_LOOP, 4);
           break;
         }
-        case 'm' : break;
-        case 'n' : break;
-        case 'o' : break;
-        case 'p' : break;
-        case 'q' : break;
-        case 'r' : break;
         case 's' : {
           if (is_keyword(file, "struct")) return make_token(file, TOKEN_STRUCT, 6);
           break;
@@ -84,11 +120,6 @@ token_t eat_token(file_t *file) {
           if (is_keyword(file, "union")) return make_token(file, TOKEN_UNION, 5);
           break;
         }
-        case 'v' : break;
-        case 'w' : break;
-        case 'x' : break;
-        case 'y' : break;
-        case 'z' : break;
       }
       int i = 0;
       while ((c >= 'a' && c <= 'z' ) || ( c >= 'A' && c <= 'Z' ) || ( c >= '0' && c <= '9' ) || c == '_') {
@@ -98,9 +129,9 @@ token_t eat_token(file_t *file) {
       return make_token(file, TOKEN_IDENTIFIER, i);
     }
 
-    /* if (c >= '0' && c <= '9') { */
-    /*   return make_token_number( file ); */
-    /* } */
+    if (c >= '0' && c <= '9') {
+      return make_token_number( file );
+    }
 
     switch ( c ) {
 
@@ -155,10 +186,6 @@ token_t eat_token(file_t *file) {
           return make_token(file, TOKEN_MINUS_EQUALS, 2);
         }
         
-        if ( peek_char(file, 1) == '>') {
-          return make_token(file, TOKEN_RARROW, 2);
-        }
-
         else {
           return make_token(file, TOKEN_MINUS, 1);
         }
@@ -195,12 +222,15 @@ token_t eat_token(file_t *file) {
        
 
       case '<' : {
-        if ( peek_char(file, 1) == '=' ) {
-          return make_token(file, TOKEN_LESS_EQUALS, 2);
+        if (peek_char(file, 1) == '<') {
+          if (peek_char(file, 2) == '=') {
+            return make_token(file, TOKEN_LSHIFT_EQUALS, 3);
+          }
+          return make_token(file, TOKEN_LSHIFT, 2);
         }
         
-        if (peek_char(file, 1) == '-') {
-          return make_token(file, TOKEN_LARROW, 2);
+        if ( peek_char(file, 1) == '=' ) {
+          return make_token(file, TOKEN_LESS_EQUALS, 2);
         }
 
         else {
@@ -209,6 +239,13 @@ token_t eat_token(file_t *file) {
       }
 
       case '>' : {
+        if ( peek_char(file, 1) == '>' ) {
+          if ( peek_char(file, 2) == '=' ) {
+            return make_token(file, TOKEN_RSHIFT_EQUALS, 3);
+          }
+          return make_token(file, TOKEN_RSHIFT, 2);
+        }
+
         if ( peek_char(file, 1) == '=' ){
           return make_token(file, TOKEN_GREATER_EQUALS, 2);
         }
@@ -387,107 +424,10 @@ token_t eat_token(file_t *file) {
 
 void print_token(file_t *file, token_t *token) {
 
-  char *token_type;
-
-  switch (token->type) {
-    
-
-    // Literals.
-    case TOKEN_IDENTIFIER : token_type = "TOKEN_IDENTIFIER"; break;
-    case TOKEN_CHARACTER : token_type = "TOKEN_CHARACTER"; break;
-    case TOKEN_STRING : token_type = "TOKEN_STRING"; break;
-    case TOKEN_NUMBER : token_type = "TOKEN_NUMBER"; break;
-
-    // ARITHMETIC OPERATORj 
-    case TOKEN_EQUALS : token_type = "TOKEN_EQUALS"; break;
-    case TOKEN_PLUS : token_type = "TOKEN_PLUS"; break;
-    case TOKEN_MINUS : token_type = "TOKEN_MINUS"; break; case TOKEN_STAR : token_type = "TOKEN_STAR"; break; case TOKEN_SLASH : token_type = "TOKEN_SLASH"; break;
-    case TOKEN_MODULO : token_type = "TOKEN_MODULO"; break;
-    
-    // BITWISE OPERATORS
-    case TOKEN_AND : token_type = "TOKEN_AND"; break;
-    case TOKEN_OR : token_type = "TOKEN_OR"; break;
-    case TOKEN_XOR : token_type = "TOKEN_XOR"; break;
-    case TOKEN_TILDE : token_type = "TOKEN_TILDE"; break;
-    case TOKEN_TILDE_AND : token_type = "TOKEN_TILDE_AND"; break;
-    case TOKEN_TILDE_OR : token_type = "TOKEN_TILDE_OR"; break;
-    case TOKEN_TILDE_XOR : token_type = "TOKEN_TILDE_XOR"; break;
-
-    // LOGICAL OPERATORS
-    case TOKEN_AND_AND : token_type = "TOKEN_AND_AND"; break;
-    case TOKEN_OR_OR : token_type = "TOKEN_OR_OR"; break;
-    case TOKEN_XOR_XOR : token_type = "TOKEN_XOR_XOR"; break;
-    case TOKEN_TILDE_TILDE : token_type = "TOKEN_TILDE_TILDE"; break;
-    case TOKEN_TILDE_AND_AND : token_type = "TOKEN_TILDE_AND_AND"; break;
-    case TOKEN_TILDE_OR_OR : token_type = "TOKEN_TILDE_OR_OR"; break;
-    case TOKEN_TILDE_XOR_XOR : token_type = "TOKEN_TILDE_XOR_XOR"; break;
-
-    // ASIGNMENTS
-    case TOKEN_PLUS_EQUALS : token_type = "TOKEN_PLUS_EQUALS"; break;
-    case TOKEN_MINUS_EQUALS : token_type = "TOKEN_MINUS_EQUALS"; break;
-    case TOKEN_STAR_EQUALS : token_type = "TOKEN_STAR_EQUALS"; break;
-    case TOKEN_SLASH_EQUALS : token_type = "TOKEN_SLASH_EQUALS"; break;
-    case TOKEN_MODULO_EQUALS : token_type = "TOKEN_MODULO_EQUALS"; break;
-    case TOKEN_AND_EQUALS : token_type = "TOKEN_AND_EQUALS"; break;
-    case TOKEN_OR_EQUALS : token_type = "TOKEN_OR_EQUALS"; break;
-    case TOKEN_XOR_EQUALS : token_type = "TOKEN_XOR_EQUALS"; break;
-    case TOKEN_TILDE_AND_EQUALS : token_type = "TOKEN_TILDE_AND_EQUALS"; break;
-    case TOKEN_TILDE_OR_EQUALS : token_type = "TOKEN_TILDE_OR_EQUALS"; break;
-    case TOKEN_TILDE_XOR_EQUALS : token_type = "TOKEN_TILDE_XOR_EQUALS"; break;
-
-    // COPMPARISONS
-    case TOKEN_EQUALS_EQUALS : token_type = "TOKEN_EQUALS_EQUALS"; break;
-    case TOKEN_LESS : token_type = "TOKEN_LESS"; break;
-    case TOKEN_LESS_EQUALS : token_type = "TOKEN_LESS_EQUALS"; break;
-    case TOKEN_GREATER : token_type = "TOKEN_GREATER"; break;
-    case TOKEN_GREATER_EQUALS : token_type = "TOKEN_GREATER_EQUALS"; break;
-    case TOKEN_TILDE_EQUALS : token_type = "TOKEN_TILDE_EQUALS"; break;
-
-    case TOKEN_LPAREN : token_type = "TOKEN_LPAREN"; break;
-    case TOKEN_RPAREN : token_type = "TOKEN_RPAREN"; break;
-    case TOKEN_LBRACKET : token_type = "TOKEN_LBRACKET"; break;
-    case TOKEN_RBRACKET : token_type = "TOKEN_RBRACKET"; break;
-    case TOKEN_LBRACE : token_type = "TOKEN_LBRACE"; break;
-    case TOKEN_RBRACE : token_type = "TOKEN_RBRACE"; break;
-
-    case TOKEN_DOT : token_type = "TOKEN_DOT"; break;
-    case TOKEN_COMMA : token_type = "TOKEN_COMMA"; break;
-    case TOKEN_COLON : token_type = "TOKEN_COLON"; break;
-    case TOKEN_SEMICOLON : token_type = "TOKEN_SEMICOLON"; break;
-
-    case TOKEN_FAT_ARROW : token_type = "TOKEN_FAT_ARROW"; break;
-    case TOKEN_LARROW : token_type = "TOKEN_LARROW"; break;
-    case TOKEN_RARROW : token_type = "TOKEN_RARROW"; break;
-
-    case TOKEN_BANG :  token_type = "TOKEN_BANG"; break;
-    case TOKEN_ROOF : token_type = "TOKEN_ROOF"; break;
-    case TOKEN_QMARK : token_type = "TOKEN_QMARK"; break;
-    case TOKEN_AT : token_type = "TOKEN_AT"; break;
-    case TOKEN_HASH : token_type = "TOKEN_HASH"; break;
-
-
-    case TOKEN_ENUM : token_type = "TOKEN_ENUM"; break;
-    case TOKEN_STRUCT : token_type = "TOKEN_STRUCT"; break;
-    case TOKEN_UNION : token_type = "TOKEN_UNION"; break;
-
-    // KEYWORDS
-    case TOKEN_FOR : token_type = "TOKEN_FOR"; break;
-    case TOKEN_WHILE : token_type = "TOKEN_WHILE"; break;
-    case TOKEN_LOOP : token_type = "TOKEN_LOOP"; break;
-    case TOKEN_BREAK : token_type = "TOKEN_BREAK"; break;
-    case TOKEN_CONTINUE : token_type = "TOKEN_CONTINUE"; break;
-    case TOKEN_IF : token_type = "TOKEN_IF"; break;
-    case TOKEN_ELSE : token_type = "TOKEN_ELSE"; break;
-    case TOKEN_TYPEDEF : token_type = "TOKEN_TYPEDEF"; break;
-
-
-    case TOKEN_ERROR : token_type = "TOKEN_ERROR"; break;
-    case TOKEN_EOF : token_type = "TOKEN_EOF"; break;
-  }
 
   printf (
     "<ID: `%d`, TYPE: `%s`, LEXME: `", 
-    token->type, token_type
+    token->type, get_token_type(token->type)
   );
   for (int i = token->lexme.start; i <= token->lexme.stop; i++) {
     printf("%c", file->src[i]);
@@ -496,9 +436,9 @@ void print_token(file_t *file, token_t *token) {
 
 } 
 
-char *get_token_type(token_type_t *type) {
+char *get_token_type(token_type_t type) {
     // Literals.
-    switch( *type ) {
+    switch( type ) {
       case TOKEN_IDENTIFIER : return "TOKEN_IDENTIFIER";
       case TOKEN_CHARACTER : return "TOKEN_CHARACTER";
       case TOKEN_STRING : return "TOKEN_STRING";
@@ -564,8 +504,10 @@ char *get_token_type(token_type_t *type) {
       case TOKEN_SEMICOLON : return "TOKEN_SEMICOLON";
 
       case TOKEN_FAT_ARROW : return "TOKEN_FAT_ARROW";
-      case TOKEN_LARROW : return "TOKEN_LARROW";
-      case TOKEN_RARROW : return "TOKEN_RARROW";
+      case TOKEN_LSHIFT_EQUALS : return "TOKEN_LSHIFT_EQUALS";
+      case TOKEN_LSHIFT : return "TOKEN_LSHIFT";
+      case TOKEN_RSHIFT_EQUALS : return "TOKEN_RSHIFT_EQUALS";
+      case TOKEN_RSHIFT : return "TOKEN_RSHIFT";
 
       case TOKEN_BANG :  return "TOKEN_BANG";
       case TOKEN_ROOF : return "TOKEN_ROOF";

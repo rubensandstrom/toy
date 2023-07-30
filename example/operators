@@ -12,10 +12,10 @@ BITWISE OPERATORS
 ~   bitwise not
 ~&  bitwise nand
 ~|  bitwise nor
-~¤  bitwise xnor
+~^  bitwise xnor
 
-<-  bitshift left
-->  bitshift right
+<<  bitshift left
+>>  bitshift right
 
 LOGICAL OPERATORS
 &&  logical and
@@ -39,7 +39,8 @@ ASIGNMENTS
 ~&= assign with bitwise nand
 ~|= assign with bitwise nor
 ~^= assign with bitwise xnor
-
+<<= assign with bitshift left
+>>= assign with bitshift right
 
 COMPARISONS
 ==  check for equality
@@ -55,9 +56,7 @@ COMPARISONS
 ?   type of if used on identifyer, generic if used in type
 []  index if used on identifyer, array if used in type
 
-
 =>  return type or types follows
-
 
 BASE TYPES
 u8
@@ -65,17 +64,21 @@ u16
 u32
 u64
 
-s8
+s8  | char
 s16
 s32
-s64
-int
+s64 | int
 
 f32
-f64
-float
+f64 | float
 
 enum
 struct
 union
 
+void
+
+char (*(*x()) []) {}          in c becomes
+x: () => ( @[]@( () => (char) ) ) {   in toy
+
+}
