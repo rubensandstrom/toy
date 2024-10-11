@@ -12,7 +12,7 @@ int main() {
 
 
 	string input = STRING(
-		"a (      b,c u32x4424 f32=0)error u32=NOFILE{}a<<<=5<= >="
+		"a (      b,c u32x4424 f32=0)error u32=NOFILE{}a<<<=5<= >=return for else ++"
 	);
 	lexer l = new_lexer(input);
 	parser p = new_parser(&l);
@@ -38,6 +38,10 @@ int main() {
 	assert(eat_token(&p).type == NUMBER);
 	assert(eat_token(&p).type == LTEQ);
 	assert(eat_token(&p).type == GTEQ);
+	assert(eat_token(&p).type == RETURN);
+	assert(eat_token(&p).type == FOR);
+	assert(eat_token(&p).type == ELSE);
+	assert(eat_token(&p).type == INC);
 
 	return 0;
 	
