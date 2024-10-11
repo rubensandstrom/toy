@@ -26,7 +26,7 @@ parser new_parser(lexer *l) {
 
 token peek_token(parser *p, uint32_t offset) {
 	// TODO: bounds check.
-	return p->buffer[ (p->token_index + offset) % 100 ];
+	return p->buffer[ (p->token_index + offset) % BUFFER_LENGTH ];
 }
 
 
