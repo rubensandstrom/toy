@@ -36,7 +36,14 @@ token eat_token(parser *p) {
 	p->token_index++;
 	return t;
 }
-/**/
+
+token match_token(parser *p, token_type t) {
+	if (!(eat_token(p).type == t)) {
+		
+	}
+
+}
+
 /*statement *parse_statement(parser *p) {*/
 /*	switch (peek_token(p, 0).type) {*/
 /*		case RETURN:*/
@@ -48,17 +55,18 @@ token eat_token(parser *p) {
 /*	}*/
 /*	return NULL;*/
 /*}*/
-/**/
+
 /*return_statement *parse_return_statement(parser *p) { // TODO: Use arena allocator.*/
 /*	return_statement *rs = (return_statement *)malloc(sizeof(return_statement));*/
 /*	rs->value = parse_expression(p);*/
 /*	return rs;*/
 /*}*/
-/**/
-/*decl_statement *parse_decl_statement(parser *p) {*/
-/*	return NULL;*/
-/*}*/
-/**/
+
+decl_statement *parse_decl_statement(parser *p) {
+	
+	return NULL;
+}
+
 /*program *parse_program(parser *p) {*/
 /*	return NULL;*/
 /*}*/

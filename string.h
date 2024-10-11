@@ -35,8 +35,12 @@ typedef enum {
 void __stack_chk_fail(void);
 
 
-void sb_write_string(string_builder *sb, string s);
-#define sb_write(sb, cp) sb_write_string(sb, (string){.data = cp, .length = sizeof(cp) - 1})
+void sb_write_string(string_builder *sb, string *s);
+#define sb_write(sb, cp) sb_write_string(sb, &(string){.data = cp, .length = sizeof(cp) - 1})
+
+void sb_write_char(string_builder *sb, char c);
+
+void sb_write_fmt(string_builder *sb, const char *format, ...);
 
 string sb_string(string_builder *sb);
 

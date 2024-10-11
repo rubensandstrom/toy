@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <stdarg.h>
+#include <assert.h>
 #include "string.h"
 
 string_builder sb_init() {
@@ -15,15 +17,57 @@ string_builder sb_init() {
 	};
 }
 
-void sb_write_string(string_builder *sb, string s) {
-    if (sb->length + s.length >= sb->capacity) {
+void sb_grow(string_builder *sb) {
+	sb->data = mremap(sb->data, sb->capacity, sb->capacity * 2, 1);
+	sb->capacity *= 2;
+}
+
+void sb_write_string(string_builder *sb, string *s) {
+    if (sb->length + s->length >= sb->capacity) {
         sb->data = mremap(sb->data, sb->capacity, sb->capacity * 2, 1);
         sb->capacity *= 2;
     }
-    for (int i = 0; i < s.length; i++) {
-        sb->data[sb->length] = s.data[i];
+    for (int i = 0; i < s->length; i++) {
+        sb->data[sb->length] = s->data[i];
         sb->length += 1;
     }
+}
+
+void sb_write_char(string_builder *sb, char c) {
+	sb->data[sb->length] = c;
+	sb->length++;
+}
+
+void sb_write_fmt(string_builder *sb, const char *format, ...) {
+	
+	int needed_length = 0;
+	int i = 0;
+
+	va_list ap;
+	va_start(ap, format);
+
+	string s;
+	while (format[i] != '\0') {
+		if (format[i] == '%') {
+			assert(format[i + 1] == 's');
+			switch (format[i + 1]) {
+				case 's':
+					s = va_arg(ap, string);
+
+					while (sb->length + s.length >= sb->capacity) {
+						sb_grow(sb);
+					}
+
+					sb_write_string(sb, &s);
+					i += 2;
+					break;
+				default:
+					panic(STRING("UNKNOWN FORMAT STRING\n"));
+			}
+		}
+		sb_write_char(sb, format[i]);
+		i++;
+	}
 }
 
 bool sb_read_file(string_builder *sb, const char *path) {
@@ -66,7 +110,7 @@ void _sb_log(string_builder *sb, log_level level, string s) {
         default:
             return;
     }
-	sb_write_string(sb, s);
+	sb_write_string(sb, &s);
 }
 
 void print(string s) {

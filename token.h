@@ -120,7 +120,7 @@ extern string token_debug[];
 
 typedef struct token {
 	token_type type;
-	string literal;
+	string lexeme;
 
 	uint32_t row;
 	uint32_t col;

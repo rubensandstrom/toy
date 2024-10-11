@@ -247,15 +247,15 @@ token next_token(lexer *l) {
 
 	l->input_index++; // TODO: We should do error handling here.
 	}
-	return (token){.type = END, .literal = "", .literal.length = 0, .row = l->row, .col = l->col};
+	return (token){.type = END, .lexeme.data = "", .lexeme.length = 0, .row = l->row, .col = l->col};
 }
 
 // Returns the next found token in lexer input buffer and increments the input index.
 token new_token(lexer *l, token_type type, uint32_t length) {
 	token t = {
 		.type = type,
-		.literal.data = &l->input.data[l->input_index],
-		.literal.length = length,
+		.lexeme.data = &l->input.data[l->input_index],
+		.lexeme.length = length,
 		.row = l->row,
 		.col = l->col
 	};
