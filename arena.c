@@ -9,7 +9,7 @@
 #define GB (1<<30)
 #define TB (1<<40)
 
-#define PAGESIZE (1024)
+#define PAGESIZE (4096)
 arena arena_init(size_t capacity) {
 	arena a = {
 		.data = (region *)mmap(0, PAGESIZE * sizeof(region), PROT_READ|PROT_WRITE, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0),
