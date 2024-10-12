@@ -7,12 +7,13 @@
 #include "lexer.h"
 #include "ast.h"
 
-#define BUFFER_LENGTH 100
+#define BUFFER_LENGTH 15
 
 typedef struct parser {
 	lexer *l;
 	token buffer[BUFFER_LENGTH];
 	size_t token_index;
+	string_builder errors;
 } parser;
 
 parser new_parser(lexer *l);

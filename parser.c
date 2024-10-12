@@ -37,11 +37,13 @@ token eat_token(parser *p) {
 	return t;
 }
 
-token match_token(parser *p, token_type t) {
-	if (!(eat_token(p).type == t)) {
-		
+bool match_token(parser *p, token_type tt) {
+	token t = eat_token(p);
+	if (t.type != tt) {
+		sb_write_fmt(&p->errors, "Expected %s, got %s:\t %d,%d.\n", token_debug[tt], token_debug[t.type], t.row, t.col);
+		return false;
 	}
-
+	return true;
 }
 
 /*statement *parse_statement(parser *p) {*/

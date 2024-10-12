@@ -19,10 +19,22 @@ lexer new_lexer(string input) {
 }
 
 token next_token(lexer *l) {
-	while (peek_char(l, 0) == ' ' || peek_char(l, 0) == '\n' || peek_char(l, 0) == '\r') l->input_index++;
 	while (l->input_index < l->input.length) {
 
 		char c = peek_char(l, 0);
+		if (c == ' ') {
+			l->input_index++;
+			l->col++;
+			continue;
+		}
+
+		if (c == '\n') {
+			l->input_index++;
+			l->col = 0;
+			l->row++;
+			continue;
+		}
+
 
 		if (is_number(c)) {
 			// TODO: Hex, oct, bin, float and scientific notation numbers

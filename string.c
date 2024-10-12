@@ -6,7 +6,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdarg.h>
-#include <assert.h>
 #include "string.h"
 
 string_builder sb_init() {
@@ -40,16 +39,18 @@ void sb_write_char(string_builder *sb, char c) {
 
 void sb_write_fmt(string_builder *sb, const char *format, ...) {
 	
-	int needed_length = 0;
 	int i = 0;
 
 	va_list ap;
 	va_start(ap, format);
 
 	string s;
+	int d;
+
+	char buf[20] = {0};
+	int bufindex = 0;
 	while (format[i] != '\0') {
 		if (format[i] == '%') {
-			assert(format[i + 1] == 's');
 			switch (format[i + 1]) {
 				case 's':
 					s = va_arg(ap, string);
@@ -61,6 +62,29 @@ void sb_write_fmt(string_builder *sb, const char *format, ...) {
 					sb_write_string(sb, &s);
 					i += 2;
 					break;
+				case 'd':
+					d = va_arg(ap, int);
+					if (d == 0) {
+						sb_write_char(sb, '0');
+					} else {
+						while (d > 0) {
+							buf[bufindex] = d % 10;
+							d /= 10;
+							bufindex++;
+						}
+						while (sb->length + bufindex >= sb->capacity) {
+							sb_grow(sb);
+						}
+
+						while (bufindex > 0) {
+							sb_write_char(sb, buf[bufindex - 1] + '0');
+							bufindex--;
+						}
+					}
+					bufindex = 0;
+					buf[0] = 0;
+					i += 2;
+					break;
 				default:
 					panic(STRING("UNKNOWN FORMAT STRING\n"));
 			}
@@ -68,6 +92,7 @@ void sb_write_fmt(string_builder *sb, const char *format, ...) {
 		sb_write_char(sb, format[i]);
 		i++;
 	}
+	va_end(ap);
 }
 
 bool sb_read_file(string_builder *sb, const char *path) {
@@ -131,4 +156,3 @@ bool string_eq(string *s1, string *s2) {
 	}
 	return true;
 }
-

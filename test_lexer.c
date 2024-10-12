@@ -12,7 +12,7 @@ int main() {
 
 
 	string input = STRING(
-		"a (      b,c u32x4424 f32=0)error u32=NOFILE{}a<<<=5<= >=return for else ++"
+		"aaa (      \nb,c u32x4424 f32=0)error u32=NOFILE{}a<<<=5<= >=return for else ++"
 	);
 	lexer l = new_lexer(input);
 	parser p = new_parser(&l);
@@ -22,13 +22,13 @@ int main() {
 	token t;
 
 	t = eat_token(&p);
-	sb_write_fmt(&output, "type: %s,\tlexeme: %s\n", token_debug[t.type], t.lexeme);
+	sb_write_fmt(&output, "type: %s\tlexeme: %s\t: %d,%d\n", token_debug[t.type], t.lexeme, t.row, t.col);
 	t = eat_token(&p);
-	sb_write_fmt(&output, "type: %s,\tlexeme: %s\n", token_debug[t.type], t.lexeme);
+	sb_write_fmt(&output, "type: %s\tlexeme: %s\t: %d,%d\n", token_debug[t.type], t.lexeme, t.row, t.col);
 	t = eat_token(&p);
-	sb_write_fmt(&output, "type: %s,\tlexeme: %s\n", token_debug[t.type], t.lexeme);
+	sb_write_fmt(&output, "type: %s\tlexeme: %s\t: %d,%d\n", token_debug[t.type], t.lexeme, t.row, t.col);
 	t = eat_token(&p);
-	sb_write_fmt(&output, "type: %s,\tlexeme: %s\n", token_debug[t.type], t.lexeme);
+	sb_write_fmt(&output, "type: %s\tlexeme: %s\t: %d,%d\n", token_debug[t.type], t.lexeme, t.row, t.col);
 
 	/*assert(eat_token(&p).type == ID);*/
 	/*assert(eat_token(&p).type == LPAREN);*/
