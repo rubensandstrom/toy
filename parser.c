@@ -40,7 +40,7 @@ token eat_token(parser *p) {
 bool match_token(parser *p, token_type tt) {
 	token t = eat_token(p);
 	if (t.type != tt) {
-		sb_write_fmt(&p->errors, "Expected %s, got %s:\t %d,%d.\n", token_debug[tt], token_debug[t.type], t.row, t.col);
+		sb_write_fmt(&p->errors, "Expected %s, got %s\t: %d,%d.\n", token_debug[tt], token_debug[t.type], t.row, t.col);
 		return false;
 	}
 	return true;
@@ -66,6 +66,7 @@ bool match_token(parser *p, token_type tt) {
 
 decl_statement *parse_decl_statement(parser *p) {
 	
+
 	return NULL;
 }
 

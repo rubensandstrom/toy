@@ -23,7 +23,7 @@ typedef union statement {
 } statement;
 
 typedef struct program {
-	statement *s;
+	dynamic_array *s; //statements
 } program;
 
 
