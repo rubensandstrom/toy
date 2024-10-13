@@ -11,12 +11,13 @@
 
 typedef struct parser {
 	lexer *l;
+	arena *a;
 	token buffer[BUFFER_LENGTH];
 	size_t token_index;
 	string_builder errors;
 } parser;
 
-parser new_parser(lexer *l);
+parser new_parser(lexer *l, arena *a);
 
 statement *parse_statement(parser *p);
 decl_statement *parse_decl_statement(parser *p);

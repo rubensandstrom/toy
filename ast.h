@@ -1,7 +1,9 @@
 #ifndef AST_H
 #define AST_H
-
+#include <stdint.h>
+#include "string.h"
 #include "token.h"
+#include "darray.h"
 
 // Expressions
 typedef union expression {} expression;
@@ -14,6 +16,7 @@ typedef struct return_statement {
 
 typedef struct decl_statement {
 	token name;
+	token type;
 	expression *value;
 } decl_statement;
 
@@ -23,7 +26,7 @@ typedef union statement {
 } statement;
 
 typedef struct program {
-	dynamic_array *s; //statements
+	dynamic_array s; //statements
 } program;
 
 

@@ -5,7 +5,7 @@
 #include "strings.h"
 
 typedef enum token_type {
-	ASSIGN,
+	ASSIGN = 1,
 	EQ,
 	BNOT,
 	NEQ,
