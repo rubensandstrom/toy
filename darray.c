@@ -39,19 +39,3 @@ void *da_pop(dynamic_array *da, size_t size) {
 void da_free(dynamic_array *da) {
 	munmap(da->data, da->capacity);
 }
-
-int main() {
-
-	dynamic_array da = da_init();
-
-	for (int i = 0; i < 5000; i++) {
-		*(int *)da_push(&da, sizeof(int)) = 5;
-	}
-
-	int a;
-	for (int i = 5000 - 1; i >= 0; i--) {
-
-		a = *(int *)da_pop(&da, sizeof(int));
-	}
-	printf("%zu\n", da.capacity);
-}

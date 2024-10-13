@@ -29,12 +29,11 @@ token next_token(lexer *l) {
 		}
 
 		if (c == '\n') {
-			l->input_index++;
+			token t = new_token(l, NEWLINE, 1);
 			l->col = 0;
 			l->row++;
-			continue;
+			return t;
 		}
-
 
 		if (is_number(c)) {
 			// TODO: Hex, oct, bin, float and scientific notation numbers

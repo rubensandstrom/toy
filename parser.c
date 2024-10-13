@@ -1,5 +1,6 @@
 #include <stddef.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/mman.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -60,6 +61,9 @@ bool match_token(parser *p, token_type tt) {
 /*	return NULL;*/
 /*}*/
 
+statement *parse_statement(parser *p) {
+	return NULL;
+}
 return_statement *parse_return_statement(parser *p) { // TODO: Use arena allocator.
 	token t;
 	return_statement *rs = (return_statement *)arena_alloc(p->a, sizeof(return_statement));
@@ -102,5 +106,9 @@ program *parse_program(parser *p) {
 		*(statement *)da_push(&prg.s, sizeof(statement)) = *s;
 	}
 
+	return NULL;
+}
+
+expression *parse_expression(parser *p) {
 	return NULL;
 }

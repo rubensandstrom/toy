@@ -92,6 +92,7 @@ string token_debug[] = {
 	[BITS] = STRING("BITS"),
 	[RETURN] = STRING("RETURN"),
 	[ASM] = STRING("ASM"),
+	[NEWLINE] = STRING("NEWLINE"),
 	[END] = STRING("END"),
 };
 

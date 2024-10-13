@@ -113,6 +113,7 @@ typedef enum token_type {
 
 	ASM,
 
+	NEWLINE,
 	END,
 } token_type;
 
